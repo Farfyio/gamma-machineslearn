@@ -1,4 +1,4 @@
-"""Reusable preprocessing pipeline building blocks."""
+"""Preprocessing utilities for research experiments."""
 
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
@@ -6,14 +6,6 @@ from sklearn.preprocessing import StandardScaler
 
 
 def create_preprocessing_pipeline() -> Pipeline:
-    """Return a baseline preprocessing pipeline.
+    """Create a lightweight default preprocessing pipeline."""
 
-    Note:
-        Keep this dataset-agnostic so features can be plugged in by callers.
-    """
-
-    return Pipeline(
-        steps=[
-            ("scaler", StandardScaler()),
-        ]
-    )
+    return Pipeline([("scaler", StandardScaler())])
