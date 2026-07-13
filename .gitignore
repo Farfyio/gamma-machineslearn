@@ -216,3 +216,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Confidential local research data
+data/
+datasets/
+research_data/
+*.h5
+*.hdf5
+*.parquet
