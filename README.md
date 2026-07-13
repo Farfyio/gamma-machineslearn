@@ -1,20 +1,40 @@
 # gamma-machineslearn
 
-Machine learning models for anomaly detection in HPGe gamma-ray spectra.
+Lightweight research project scaffold for anomaly detection on gamma-ray spectra.
 
-## Project structure
+## Goals
 
-- `gamma_machineslearn/data.py`: reusable data loading utilities.
-- `gamma_machineslearn/preprocessing.py`: shared preprocessing pipeline.
-- `gamma_machineslearn/models.py`: model registry/factory with built-in One-Class SVM and Isolation Forest support.
-- `gamma_machineslearn/pipeline.py`: common train/evaluate experiment pipeline.
-- `gamma_machineslearn/evaluation.py`: reusable evaluation helpers.
-- `gamma_machineslearn/visualization.py`: reusable plotting helpers.
+- Keep shared code small and easy to extend.
+- Support rapid experiments for One-Class SVM and Isolation Forest.
+- Avoid dataset-specific logic inside reusable modules.
 
-## Confidential research data
+## Structure
 
-Research data is confidential and must never be committed. Keep local datasets in ignored directories such as `data/`, `datasets/`, or `research_data/`.
+```text
+.
+├── requirements.txt
+├── src/
+│   └── gamma_machineslearn/
+│       ├── config/
+│       ├── evaluation/
+│       └── preprocessing/
+└── tests/
+```
 
-## Extending with new algorithms
+## Included utilities
 
-Register a custom estimator constructor in `ModelFactory.register(...)` and run it through `AnomalyDetectionExperiment` to reuse the same preprocessing and evaluation flow.
+- `config`: YAML-backed `ProjectConfig` loading
+- `preprocessing`: reusable sklearn preprocessing pipeline
+- `evaluation`: anomaly-detection metric helpers
+
+## Quick start
+
+1. Create and activate a virtual environment.
+2. Install dependencies:
+   - `pip install -r requirements.txt`
+3. Extend from `src/gamma_machineslearn` for model-specific experiment scripts.
+
+## Guardrails
+
+- Keep shared modules dataset-agnostic.
+- Add model-specific workflows separately from reusable utilities.
