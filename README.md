@@ -1,40 +1,40 @@
 # gamma-machineslearn
 
-Machine learning project scaffolding for anomaly detection workflows in HPGe gamma-ray spectra.
+Lightweight research project scaffold for anomaly detection on gamma-ray spectra.
 
-## What is included
+## Goals
 
-- Reusable, dataset-agnostic preprocessing pipeline utilities
-- Shared evaluation metrics and report-writing helpers
-- Central logging configuration helpers
-- YAML-based project configuration loading
-- Project documentation skeleton
+- Keep shared code small and easy to extend.
+- Support rapid experiments for One-Class SVM and Isolation Forest.
+- Avoid dataset-specific logic inside reusable modules.
 
-## Repository layout
+## Structure
 
 ```text
 .
-├── docs/
-│   ├── configuration.md
-│   └── project_structure.md
 ├── requirements.txt
 ├── src/
 │   └── gamma_machineslearn/
 │       ├── config/
 │       ├── evaluation/
-│       ├── logging_utils/
 │       └── preprocessing/
 └── tests/
 ```
+
+## Included utilities
+
+- `config`: YAML-backed `ProjectConfig` loading
+- `preprocessing`: reusable sklearn preprocessing pipeline
+- `evaluation`: anomaly-detection metric helpers
 
 ## Quick start
 
 1. Create and activate a virtual environment.
 2. Install dependencies:
    - `pip install -r requirements.txt`
-3. Build on top of `src/gamma_machineslearn` modules for dataset-specific experiments.
+3. Extend from `src/gamma_machineslearn` for model-specific experiment scripts.
 
-## Design guardrails
+## Guardrails
 
-- Shared modules in `src/gamma_machineslearn` must remain dataset-agnostic.
-- Dataset-specific loading/cleaning logic should live in dedicated experiment code.
+- Keep shared modules dataset-agnostic.
+- Add model-specific workflows separately from reusable utilities.
