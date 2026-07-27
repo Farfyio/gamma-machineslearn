@@ -1,7 +1,10 @@
 """Evaluation utilities shared across experiments."""
 
+from __future__ import annotations
+
 from typing import Mapping
 
+import numpy as np
 from sklearn.metrics import f1_score, precision_score, recall_score, roc_auc_score
 
 
@@ -25,3 +28,21 @@ def anomaly_detection_metrics(y_true, y_pred, y_score=None) -> Mapping[str, floa
         metrics["roc_auc"] = roc_auc_score(y_true, y_score)
 
     return metrics
+
+
+def evaluate_predictions(predictions: np.ndarray, y_true: np.ndarray | None = None) -> dict[str, float]:
+    """Evaluate anomaly predictions with or without labels."""
+    predictions = np.asarray(predictions)
+
+    if y_true is None:
+        return {"anomaly_fraction": float(np.mean(predictions == -1))}
+
+    from sklearn.metrics import accuracy_score
+
+    y_true = np.asarray(y_true)
+    return {
+        "precision": float(precision_score(y_true, predictions, pos_label=-1, zero_division=0)),
+        "recall": float(recall_score(y_true, predictions, pos_label=-1, zero_division=0)),
+        "f1": float(f1_score(y_true, predictions, pos_label=-1, zero_division=0)),
+        "accuracy": float(accuracy_score(y_true, predictions)),
+    }

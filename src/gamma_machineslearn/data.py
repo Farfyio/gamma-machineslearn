@@ -3,21 +3,13 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Optional
 
 import numpy as np
 
 
-def load_spectra_csv(path: str | Path, label_column: Optional[str] = None) -> Tuple[np.ndarray, Optional[np.ndarray]]:
-    """Load tabular spectra data from CSV.
-
-    Args:
-        path: CSV file path.
-        label_column: Optional column name containing labels.
-
-    Returns:
-        Tuple of feature matrix and optional label vector.
-    """
+def load_spectra_csv(path: str | Path, label_column: Optional[str] = None) -> tuple[np.ndarray, Optional[np.ndarray]]:
+    """Load tabular spectra data from CSV."""
     import pandas as pd
 
     frame = pd.read_csv(path)
