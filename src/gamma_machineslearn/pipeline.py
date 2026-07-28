@@ -37,6 +37,9 @@ class AnomalyDetectionExperiment:
         x_test_transformed = self.preprocessor.transform(x_test)
 
         model = self.model_factory.create(model_name, **model_params)
+       #Mkaes sure that the modeland params areactually there
+        print(f"Running experiment with model: {model}")
+
         model.fit(x_train_transformed)
         predictions = model.predict(x_test_transformed)
 
