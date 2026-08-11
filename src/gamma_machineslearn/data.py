@@ -41,7 +41,7 @@ def load_spectra_csv(path: str | Path, label_column: Optional[str] = None) -> Tu
         import pandas as pd  # type: ignore
     except Exception as exc:
         raise RuntimeError("pandas is required to load CSV data") from exc
-
+    # loads the csv file into a DataFrame
     frame = pd.read_csv(path)
     labels = None
 
@@ -51,3 +51,21 @@ def load_spectra_csv(path: str | Path, label_column: Optional[str] = None) -> Tu
         labels = frame.pop(label_column).to_numpy()
 
     return frame.to_numpy(), labels
+
+def load_single_spectrum(path:str | Path) -> np.ndarray:
+    """Load one processgamma spectrum as one ML sample"""
+    
+    try:
+        import pandas as pd
+    except Exception as exc:
+        raise RuntimeError("Pandas is required to load CSV data") from exc
+
+    frame = pd.read_csv(path)
+
+    if "Counts" not in frame.columns:
+        raise ValueError(f"Unknown column: Counts")
+
+    counts = frame["Counts"].to_numpy(dtype=float)
+
+    return counts.reshape(1, -1)
+  

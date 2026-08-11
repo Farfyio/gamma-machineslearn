@@ -29,7 +29,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     parser.add_argument("--n-train", type=int, default=100, help="Number of synthetic training samples")
     parser.add_argument("--n-test", type=int, default=50, help="Number of synthetic test samples")
     parser.add_argument("--features", type=int, default=10, help="Number of features for synthetic data")
-    parser.add_argument("--data", type=str, default=None, help="Path to CSV file to use instead of synthetic data")
+    parser.add_argument("--data", type=str, default=deafult_data_path, help="Path to CSV file to use instead of synthetic data")
     parser.add_argument("--seed", type=int, default=0, help="Random seed for reproducibility (0 = no seed)")
 
     args = parser.parse_args(argv)

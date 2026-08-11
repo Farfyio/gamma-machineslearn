@@ -25,6 +25,7 @@ class ModelFactory:
     def __post_init__(self) -> None:
         if not self._registry:
             self.register("one_class_svm", one_class_svm_factory)
+            
             self.register("isolation_forest", isolation_forest_factory)
         #the register functionaddsa  model to the registry dicitonary
     def register(self, name: str, builder: EstimatorFactory) -> None:
