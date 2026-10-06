@@ -62,10 +62,31 @@ def load_single_spectrum(path:str | Path) -> np.ndarray:
 
     frame = pd.read_csv(path)
 
-    if "Counts" not in frame.columns:
-        raise ValueError(f"Unknown column: Counts")
+    if "counts per channel" not in frame.columns:
+        raise ValueError(f"Unknown column: counts per channel")
 
-    counts = frame["Counts"].to_numpy(dtype=float)
+    counts = frame["counts per channel"].to_numpy(dtype=float)
 
     return counts.reshape(1, -1)
-  
+
+def load_spectra_directory(directory: str | Path):
+    """Load all spectra in a directory"""
+
+    directory = Path(directory)
+
+    spectra = []
+    labels = []
+
+    for file_path in sorted(directory.rglob("combined_spectrum_*.csv")):
+        spectrum = load_single_spectrum(file_path)
+        spectra.append(spectrum.flatten())
+
+        parts = file_path.stem.split("_")
+        impure_value = int(parts[3])
+
+        #Follwoing the namieng convention of the deaflut ML models, we will use 1 for pure and -1 for impure
+        if impure_value == 0:
+            labels.append(1)
+        else:
+            labels.append(-1)
+    return np.asarray(spectra), np.asarray(labels)

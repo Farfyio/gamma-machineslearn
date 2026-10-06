@@ -1,12 +1,4 @@
-"""Tiny CLI runner for quick experiments.
 
-This script is intentionally minimal so you can quickly run the
-experiment pipeline locally. It supports either synthetic data (default)
-or loading a CSV dataset via `--data PATH` (CSV must be numeric features).
-
-Edit the `main()` function or the `argparse` options below to change
-how experiments are run (seed, model params, data loading, etc.).
-"""
 
 from __future__ import annotations
 
@@ -14,11 +6,14 @@ import argparse
 from pathlib import Path
 from typing import Optional
 
+
 import numpy as np
 from numpy.ma import exp
+from sklearn.model_selection import train_test_split
 
 from gamma_machineslearn import AnomalyDetectionExperiment
-from gamma_machineslearn.data import load_csv
+from gamma_machineslearn.visualization import save_confusion_matrix
+from gamma_machineslearn.data import load_csv, load_spectra_directory
 
 #default data path thatI can change with whatver data i need
 deafult_data_path = Path("datasets") / "cards_data.csv"
@@ -38,18 +33,41 @@ def main(argv: Optional[list[str]] = None) -> int:
         np.random.seed(args.seed)
 
     if args.data:
-        X = load_csv(args.data)
-        # simple split: first n_train rows -> train, rest -> test (if available)
-        n_train = min(args.n_train, X.shape[0])
-        X_train = X[:n_train]
-        X_test = X[n_train : n_train + args.n_test]
-        if X_test.size == 0:
-            # If there are not enough rows, reuse a slice for test
-            X_test = X[: args.n_test]
+        X, y = load_spectra_directory(args.data)
+        #Print out the shape of the data and the # of pure and impure spectra
+        print("X shape:", X.shape)
+        print("Labels shape:", y.shape)
+        print("Pure spectra:", np.sum(y==1))
+        print("Impure spectra:", np.sum(y==-1))
+        #Sepeerate the two sides
+        pure_spectra = X[y == 1]
+        impure_spectra = X[y == -1]
+        #Split the pure psectra into a 80-20 split for the training and testing
+        X_train, X_pure_test = train_test_split(
+            pure_spectra,
+            test_size = 0.3,
+            random_state = args.seed if args.seed else None,
+            shuffle = True
+        )
+        #Combien the 20 from the pure spectra wiht the rest of the impure to use as the test set
+        X_test = np.vstack((X_pure_test, impure_spectra))
+        y_test = np.conctenate((
+            np.ones(len(X_pure_test), dtype = int),
+            -np.ones(len(impure_spectra), dtyype = int)
+
+        ))
+        #Shuffles the test set so it is not ordered with how it was create above this
+        rng = np.random.default_rng(args.seed if args.seed else None)
+        indices = rng.permutation(len(X_test))
+        X_test = X_test[indices]
+        y_test = y_test[indices]
+
+
     else:
         # Synthetic data: standard normal features
         X_train = np.random.randn(args.n_train, args.features)
         X_test = np.random.randn(args.n_test, args.features)
+        y_test = None  # No labels for synthetic data
 
     exp = AnomalyDetectionExperiment()
 
@@ -76,7 +94,9 @@ def main(argv: Optional[list[str]] = None) -> int:
     X_test,
     model_name=args.model,
     model_params=model_params,
+    y_test=y_test
 )
+    
 
     print("Metrics:")
     for k, v in result["metrics"].items():
