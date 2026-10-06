@@ -27,12 +27,14 @@ class ModelFactory:
             self.register("one_class_svm", one_class_svm_factory)
             
             self.register("isolation_forest", isolation_forest_factory)
+            
         #the register functionaddsa  model to the registry dicitonary
     def register(self, name: str, builder: EstimatorFactory) -> None:
         """Register a model constructor for future experimentation."""
         key = self._normalize_name(name)
         self._registry[key] = builder
         #the create fucntion createsa model instance by name
+
     def create(self, name: str, **kwargs):
         """Create a model instance by name."""
         key = self._normalize_name(name)
@@ -40,6 +42,7 @@ class ModelFactory:
             available = ", ".join(sorted(self._registry.keys()))
             raise ValueError(f"Unknown model '{name}'. Available models: {available}")
         return self._registry[key](**kwargs)
+    
     #the normalize name fucntion maes the names constistent
     @staticmethod
     def _normalize_name(name: str) -> str:
