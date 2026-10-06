@@ -1,12 +1,6 @@
-
-
 from __future__ import annotations
-
 import argparse
-from pathlib import Path
 from typing import Optional
-
-
 import numpy as np
 from numpy.ma import exp
 from sklearn.model_selection import train_test_split
@@ -15,8 +9,6 @@ from gamma_machineslearn import AnomalyDetectionExperiment
 from gamma_machineslearn.visualization import save_confusion_matrix
 from gamma_machineslearn.data import load_csv, load_spectra_directory
 
-#default data path thatI can change with whatver data i need
-deafult_data_path = Path("datasets") / "cards_data.csv"
 
 def main(argv: Optional[list[str]] = None) -> int:
     parser = argparse.ArgumentParser(description="Run a tiny anomaly experiment")
@@ -77,12 +69,6 @@ def main(argv: Optional[list[str]] = None) -> int:
         y_test = y_test[indices]
 
 
-    else:
-        # Synthetic data: standard normal features
-        X_train = np.random.randn(args.n_train, args.features)
-        X_test = np.random.randn(args.n_test, args.features)
-        y_test = None  # No labels for synthetic data
-
     exp = AnomalyDetectionExperiment()
 
     print(f"Running experiment with model={args.model}")
@@ -112,7 +98,7 @@ def main(argv: Optional[list[str]] = None) -> int:
 )
     if y_test is not None:
         save_confusion_matrix(
-            result["metrics"]["confusions_matrix"],
+            result["metrics"]["confusion_matrix"],
             title=f"Confusion Matrix ({args.model})",
             output_path=f"confusion_matrix_{args.model}.png"
         )
