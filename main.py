@@ -52,7 +52,7 @@ def main(argv: Optional[list[str]] = None) -> int:
         X_train, X_pure_test = train_test_split(
             pure_spectra,
             test_size = 0.2,
-            random_state = args.seed if args.seed else None,
+            random_state = args.seed,
             shuffle = True
         )
         #Combien the 20 from the pure spectra wiht the rest of the impure to use as the test set
@@ -63,7 +63,7 @@ def main(argv: Optional[list[str]] = None) -> int:
 
         ))
         #Shuffles the test set so it is not ordered with how it was create above this
-        rng = np.random.default_rng(args.seed if args.seed else None)
+        rng = np.random.default_rng(args.seed)
         indices = rng.permutation(len(X_test))
         X_test = X_test[indices]
         y_test = y_test[indices]
