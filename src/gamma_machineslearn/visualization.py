@@ -24,3 +24,22 @@ def plot_anomaly_scores(scores: np.ndarray, threshold: Optional[float] = None, a
         ax.axhline(y=threshold, linestyle="--")
 
     return ax
+
+def save_confusion_matrix(matrix,title="Confusion Matrix", output_path: str = "confusion_matrix.png") -> None:
+    """Save a confusion matrix as an image."""
+
+    import matplotlib.pyplot as plt
+    from sklearn.metrics import ConfusionMatrixDisplay
+
+    disp = ConfusionMatrixDisplay(
+        confusion_matrix=matrix,
+        display_labels=["Pure", "Impure"]
+
+    )
+
+    disp.plot(cmap = "viridis", values_format = "d")
+    plt.title(title)
+    plt.tight_layout
+    plt.savefig(output_path, dpi = 300)
+    plt.close()
+

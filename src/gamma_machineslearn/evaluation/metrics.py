@@ -5,7 +5,13 @@ from __future__ import annotations
 from typing import Mapping
 
 import numpy as np
-from sklearn.metrics import f1_score, precision_score, recall_score, roc_auc_score
+#I did not know we can group imports together like this
+from sklearn.metrics import (f1_score, 
+                             precision_score, 
+                             recall_score, 
+                             roc_auc_score,
+                             confusion_matrix
+                             )
 
 
 
@@ -30,7 +36,9 @@ def anomaly_detection_metrics(y_true, y_pred, y_score=None) -> Mapping[str, floa
     return metrics
 
 
-def evaluate_predictions(predictions: np.ndarray, y_true: np.ndarray | None = None) -> dict[str, float]:
+
+def evaluate_predictions(predictions: np.ndarray, y_true: np.ndarray | None = None) -> dict:
+    
     """Evaluate anomaly predictions with or without labels."""
     predictions = np.asarray(predictions)
 
@@ -40,9 +48,17 @@ def evaluate_predictions(predictions: np.ndarray, y_true: np.ndarray | None = No
     from sklearn.metrics import accuracy_score
 
     y_true = np.asarray(y_true)
+    matrix = confusion_matrix(
+        y_true,
+        predictions,
+        labels=[-1, -1]
+    
+    )
+
     return {
         "precision": float(precision_score(y_true, predictions, pos_label=-1, zero_division=0)),
         "recall": float(recall_score(y_true, predictions, pos_label=-1, zero_division=0)),
         "f1": float(f1_score(y_true, predictions, pos_label=-1, zero_division=0)),
         "accuracy": float(accuracy_score(y_true, predictions)),
+        "confusion_matrix": matrix,
     }
