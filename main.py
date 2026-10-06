@@ -20,12 +20,26 @@ deafult_data_path = Path("datasets") / "cards_data.csv"
 
 def main(argv: Optional[list[str]] = None) -> int:
     parser = argparse.ArgumentParser(description="Run a tiny anomaly experiment")
-    parser.add_argument("-m", "--model", default="one_class_svm", help="Model name to use (one_class_svm or isolation_forest)")
-    parser.add_argument("--n-train", type=int, default=100, help="Number of synthetic training samples")
-    parser.add_argument("--n-test", type=int, default=50, help="Number of synthetic test samples")
-    parser.add_argument("--features", type=int, default=10, help="Number of features for synthetic data")
-    parser.add_argument("--data", type=str, default=deafult_data_path, help="Path to CSV file to use instead of synthetic data")
-    parser.add_argument("--seed", type=int, default=0, help="Random seed for reproducibility (0 = no seed)")
+    parser.add_argument(
+    "-m",
+    "--model",
+    default="one_class_svm",
+    choices=["one_class_svm", "isolation_forest"],
+    help="Anomaly detection model to run"
+)
+    parser.add_argument(
+    "--data",
+    type=str,
+    required=True,
+    help="Directory containing combined spectrum CSV files"
+)
+    parser.add_argument(
+    "--seed",
+    type=int,
+    default=0,
+    help="Random seed for reproducibility"
+)
+
 
     args = parser.parse_args(argv)
 
@@ -45,15 +59,15 @@ def main(argv: Optional[list[str]] = None) -> int:
         #Split the pure psectra into a 80-20 split for the training and testing
         X_train, X_pure_test = train_test_split(
             pure_spectra,
-            test_size = 0.3,
+            test_size = 0.2,
             random_state = args.seed if args.seed else None,
             shuffle = True
         )
         #Combien the 20 from the pure spectra wiht the rest of the impure to use as the test set
         X_test = np.vstack((X_pure_test, impure_spectra))
-        y_test = np.conctenate((
+        y_test = np.concatenate((
             np.ones(len(X_pure_test), dtype = int),
-            -np.ones(len(impure_spectra), dtyype = int)
+            -np.ones(len(impure_spectra), dtype = int)
 
         ))
         #Shuffles the test set so it is not ordered with how it was create above this
@@ -96,6 +110,12 @@ def main(argv: Optional[list[str]] = None) -> int:
     model_params=model_params,
     y_test=y_test
 )
+    if y_test is not None:
+        save_confusion_matrix(
+            result["metrics"]["confusions_matrix"],
+            title=f"Confusion Matrix ({args.model})",
+            output_path=f"confusion_matrix_{args.model}.png"
+        )
     
 
     print("Metrics:")
