@@ -39,7 +39,7 @@ def save_confusion_matrix(matrix,title="Confusion Matrix", output_path: str = "c
 
     disp.plot(cmap = "viridis", values_format = "d")
     plt.title(title)
-    plt.tight_layout
+    plt.tight_layout()
     plt.savefig(output_path, dpi = 300)
     plt.close()
 

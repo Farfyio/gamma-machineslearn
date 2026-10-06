@@ -51,7 +51,7 @@ def evaluate_predictions(predictions: np.ndarray, y_true: np.ndarray | None = No
     matrix = confusion_matrix(
         y_true,
         predictions,
-        labels=[-1, -1]
+        labels=[1, -1]
     
     )
 
