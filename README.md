@@ -1,12 +1,10 @@
 # gamma-machineslearn
 
-Lightweight research project scaffold for anomaly detection on gamma-ray spectra.
+Research project focused on anomaly detection in gamma spectra using machine learning models.
 
-## Goals
+## Research objective
 
-- Keep shared code small and easy to extend.
-- Support rapid experiments for One-Class SVM and Isolation Forest.
-- Avoid dataset-specific logic inside reusable modules.
+Build and compare anomaly-detection approaches (currently One-Class SVM and Isolation Forest) to detect unusual gamma spectra patterns.
 
 ## Structure
 
@@ -14,12 +12,14 @@ Lightweight research project scaffold for anomaly detection on gamma-ray spectra
 .
 ├── README.md
 ├── .gitignore
+├── main.py
 ├── requirements.txt
+├── datasets/
+│   └── cards_data.csv
 ├── src/
 │   └── gamma_machineslearn/
 │       ├── __init__.py
 │       ├── data.py
-│       ├── models.py
 │       ├── pipeline.py
 │       ├── visualization.py
 │       ├── config/
@@ -28,9 +28,15 @@ Lightweight research project scaffold for anomaly detection on gamma-ray spectra
 │       ├── evaluation/
 │       │   ├── __init__.py
 │       │   └── metrics.py
-│       └── preprocessing/
+│       ├── preprocessing/
+│       │   ├── __init__.py
+│       │   └── pipeline.py
+│       └── models/
 │           ├── __init__.py
-│           └── pipeline.py
+│           ├── factory.py
+│           ├── one_class_svm.py
+│           ├── isolation_forest.py
+│           └── SGD_one_class_svm.py
 └── tests/
     ├── __init__.py
     ├── test_config.py
@@ -42,37 +48,41 @@ Lightweight research project scaffold for anomaly detection on gamma-ray spectra
 
 ## What each part is for
 
-- `README.md`: project overview and usage notes.
-- `.gitignore`: files/folders excluded from version control.
-- `requirements.txt`: Python dependencies.
+- `main.py`: command-line entry point for running experiments and generating confusion matrix images.
+- `datasets/`: local dataset files for experiments.
 - `src/gamma_machineslearn/`: main package.
-  - `models.py`: register/create anomaly models (**add custom model constructors here**).
+  - `models/`: model implementations and factory registration.
   - `pipeline.py`: shared train/predict/evaluate flow.
-  - `data.py`: CSV/data loading helpers.
-  - `visualization.py`: plotting helpers for anomaly scores.
-  - `config/settings.py`: YAML config dataclass + loader.
-  - `evaluation/metrics.py`: anomaly metric helpers and prediction evaluation.
+  - `data.py`: data loading helpers.
+  - `visualization.py`: plotting helpers (including confusion matrix saving).
+  - `config/settings.py`: configuration dataclass and loader.
+  - `evaluation/metrics.py`: metrics and confusion matrix calculation.
   - `preprocessing/pipeline.py`: preprocessing pipeline creators.
-  - `__init__.py` files: package/module exports.
-- `tests/`: unit tests for config, preprocessing, evaluation, models, and pipeline.
+- `tests/`: unit tests for configuration, preprocessing, evaluation, models, and pipeline behavior.
 
 ## Where to put your machine learning code
 
-- Put **new model integrations** in `/home/runner/work/gamma-machineslearn/gamma-machineslearn/src/gamma_machineslearn/models.py` via `ModelFactory.register(...)`.
+- Put **new model integrations** in `/home/runner/work/gamma-machineslearn/gamma-machineslearn/src/gamma_machineslearn/models/` and register through the model factory.
 - Put **experiment flow updates** in `/home/runner/work/gamma-machineslearn/gamma-machineslearn/src/gamma_machineslearn/pipeline.py`.
 - Put **feature/data preprocessing steps** in `/home/runner/work/gamma-machineslearn/gamma-machineslearn/src/gamma_machineslearn/preprocessing/pipeline.py`.
 - Put **evaluation logic or new metrics** in `/home/runner/work/gamma-machineslearn/gamma-machineslearn/src/gamma_machineslearn/evaluation/metrics.py`.
-- Keep reusable helpers inside package modules, and keep one-off notebooks/scripts outside shared modules.
 
 ## Quick start
 
 1. Create and activate a virtual environment.
-2. Install dependencies:
-   - `pip install -r requirements.txt`
-3. Run tests with `PYTHONPATH=src python -m unittest discover -s tests -v`.
-4. Add model-specific experiment logic under `src/gamma_machineslearn/` and keep reusable helpers in package submodules.
+2. Install dependencies: `pip install -r requirements.txt`
+3. Run tests: `PYTHONPATH=src python -m unittest discover -s tests -v`
+4. Run an experiment (example):
+   - `PYTHONPATH=src python main.py --model one_class_svm --data /path/to/combined_csv_dir`
 
-## Guardrails
+## First test results (share here)
 
-- Keep shared modules dataset-agnostic.
-- Add model-specific workflows separately from reusable utilities.
+Add your first confusion matrices in this section after running experiments.
+
+### One-Class SVM confusion matrix
+
+![One-Class SVM confusion matrix](confusion_matrix_one_class_svm.png)
+
+### Isolation Forest confusion matrix
+
+![Isolation Forest confusion matrix](confusion_matrix_isolation_forest.png)
