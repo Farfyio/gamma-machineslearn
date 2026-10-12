@@ -12,6 +12,7 @@ class EstimatorFactory(Protocol):
 
 from .isolation_forest import isolation_forest_factory
 from .one_class_svm import one_class_svm_factory
+from .SGD_one_class_svm import sgd_one_class_svm_factory
 '''
 The ModelFactory class, storesa dictionary of model names
  and their corresponding factory functions.
@@ -27,6 +28,8 @@ class ModelFactory:
             self.register("one_class_svm", one_class_svm_factory)
             
             self.register("isolation_forest", isolation_forest_factory)
+
+            self.register("sgd_one_class_svm", sgd_one_class_svm_factory)
             
         #the register functionaddsa  model to the registry dicitonary
     def register(self, name: str, builder: EstimatorFactory) -> None:

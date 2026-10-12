@@ -16,7 +16,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     "-m",
     "--model",
     default="one_class_svm",
-    choices=["one_class_svm", "isolation_forest"],
+    choices=["one_class_svm", "isolation_forest", "sgd_one_class_svm"],
     help="Anomaly detection model to run"
 )
     parser.add_argument(
@@ -86,6 +86,12 @@ def main(argv: Optional[list[str]] = None) -> int:
         "contamination": 0.05,
         "random_state": args.seed,
     }
+    elif args.model == "sgd_one_class_svm":
+        model_params = {
+            "nu": 0.05,
+            "max_iter": 1000,
+            "random_state": args.seed,
+        }
     else:
         model_params = {}
 
