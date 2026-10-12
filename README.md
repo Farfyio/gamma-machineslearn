@@ -1,3 +1,5 @@
+
+
 # gamma-machineslearn
 
 Research project focused on anomaly detection in gamma spectra using machine learning models.
@@ -79,8 +81,8 @@ Add your first confusion matrices in this section after running experiments.
 
 ### One-Class SVM confusion matrix
 
-![One-Class SVM confusion matrix](confusion_matrix_one_class_svm.png)
+<img width="960" height="770" alt="confusion_matrix_one_class_svm" src="https://github.com/user-attachments/assets/37c78ac3-4be8-4240-83f5-21f23d36f4e4" />
 
 ### Isolation Forest confusion matrix
 
-![Isolation Forest confusion matrix](confusion_matrix_isolation_forest.png)
+<img width="960" height="770" alt="confusion_matrix_isolation_forest" src="https://github.com/user-attachments/assets/d5262c68-1546-4436-97b5-e954a2f15f7d" />
