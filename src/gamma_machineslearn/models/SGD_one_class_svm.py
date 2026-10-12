@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 try:
-    from sklearn.svm import SGDOneClassSVM
+    from sklearn.linear_model import SGDOneClassSVM
 except Exception as exc:  # pragma: no cover - environment dependent
     _SKLEARN_IMPORT_ERROR = exc
-    OneClassSVM = None
+    SGDOneClassSVM = None
 else:
     _SKLEARN_IMPORT_ERROR = None
 
@@ -14,10 +14,10 @@ else:
 def _require_sklearn() -> None:
     if _SKLEARN_IMPORT_ERROR is not None:
         raise ImportError(
-            "scikit-learn is required for One-Class SVM."
+            "scikit-learn is required for SGD One-Class SVM."
         ) from _SKLEARN_IMPORT_ERROR
 
 
-def one_class_svm_factory(**kwargs):
+def sgd_one_class_svm_factory(**kwargs):
     _require_sklearn()
-    return OneClassSVM(**kwargs)
+    return SGDOneClassSVM(**kwargs)
