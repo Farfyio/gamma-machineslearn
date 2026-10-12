@@ -14,8 +14,6 @@ Build and compare anomaly-detection approaches (currently One-Class SVM and Isol
 ├── .gitignore
 ├── main.py
 ├── requirements.txt
-├── datasets/
-│   └── cards_data.csv
 ├── src/
 │   └── gamma_machineslearn/
 │       ├── __init__.py
