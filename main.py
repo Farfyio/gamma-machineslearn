@@ -49,24 +49,31 @@ def main(argv: Optional[list[str]] = None) -> int:
         pure_spectra = X[y == 1]
         impure_spectra = X[y == -1]
         #Split the pure psectra into a 80-20 split for the training and testing
-        X_train, X_pure_test = train_test_split(
+        X_pure_train, X_pure_test = train_test_split(
             pure_spectra,
             test_size = 0.2,
             random_state = args.seed,
             shuffle = True
         )
-        #Combien the 20 from the pure spectra wiht the rest of the impure to use as the test set
-        X_test = np.vstack((X_pure_test, impure_spectra))
+        _, X_impure_test = train_test_split(
+            impure_spectra,
+            test_size = 0.2,
+            random_state = args.seed,
+            shuffle = True
+        )
+        X_train = X_pure_train
+        X_test = np.vstack((X_pure_test, X_impure_test))
         y_test = np.concatenate((
-            np.ones(len(X_pure_test), dtype = int),
-            -np.ones(len(impure_spectra), dtype = int)
-
+            np.ones(len(X_pure_test), dtype=int),
+            -np.ones(len(X_impure_test), dtype=int)
         ))
+
         #Shuffles the test set so it is not ordered with how it was create above this
         rng = np.random.default_rng(args.seed)
         indices = rng.permutation(len(X_test))
         X_test = X_test[indices]
         y_test = y_test[indices]
+
 
 
     exp = AnomalyDetectionExperiment()
@@ -91,6 +98,7 @@ def main(argv: Optional[list[str]] = None) -> int:
             "nu": 0.05,
             "max_iter": 1000,
             "random_state": args.seed,
+            "learning_rate": "adaptive"
         }
     else:
         model_params = {}
