@@ -43,3 +43,20 @@ def save_confusion_matrix(matrix,title="Confusion Matrix", output_path: str = "c
     plt.savefig(output_path, dpi = 300)
     plt.close()
 
+def save_prediction_results(
+    file_paths,
+    y_true,
+    predictions,
+    output_path="prediction_results.csv"
+) -> None:
+    """Save each tested spectrum and its prediction to a CSV."""
+
+    import pandas as pd
+
+    results = pd.DataFrame({
+        "file": file_paths,
+        "actual": np.where(y_true == -1, "Impure", "Pure"),
+        "predicted": np.where(predictions == -1, "Impure", "Pure")
+    })
+
+    results.to_csv(output_path, index=False)

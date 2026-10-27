@@ -76,10 +76,15 @@ def load_spectra_directory(directory: str | Path):
 
     spectra = []
     labels = []
+    #Added this to try and figure the exact data it makres prue and impure
+    file_paths = []
 
     for file_path in sorted(directory.rglob("combined_spectrum_*.csv")):
         spectrum = load_single_spectrum(file_path)
         spectra.append(spectrum.flatten())
+
+        file_paths.append(file_path.name)
+        
 
         parts = file_path.stem.split("_")
         impure_value = int(parts[3])
@@ -89,4 +94,4 @@ def load_spectra_directory(directory: str | Path):
             labels.append(1)
         else:
             labels.append(-1)
-    return np.asarray(spectra), np.asarray(labels)
+    return np.asarray(spectra), np.asarray(labels), np.asarray(file_paths)
