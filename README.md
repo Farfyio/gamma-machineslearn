@@ -75,7 +75,7 @@ Build and compare anomaly-detection approaches (currently One-Class SVM and Isol
 4. Run an experiment (example):
    - `PYTHONPATH=src python main.py --model one_class_svm --data /path/to/combined_csv_dir`
 
-## First test results (share here)
+## First test results 
 
 Add your first confusion matrices in this section after running experiments.
 
