@@ -95,3 +95,15 @@ def load_spectra_directory(directory: str | Path):
         else:
             labels.append(-1)
     return np.asarray(spectra), np.asarray(labels), np.asarray(file_paths)
+
+#This is for experimental data, where we don't have a label, so we will just return the spectrum
+def load_experimental_spectrum(path: str | Path):
+    import pandas as pd
+
+    frame = pd.read_csv(path)
+    frame.columns = frame.columns.str.strip()
+
+    energy = frame["Energy"].to_numpy(dtype=float)
+    counts = frame["Data"].to_numpy(dtype=float)
+
+    return energy, counts

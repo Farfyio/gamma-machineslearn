@@ -31,6 +31,12 @@ def main(argv: Optional[list[str]] = None) -> int:
     default=0,
     help="Random seed for reproducibility"
 )
+    parser.add_argument(
+    "--run-name",
+    type = str,
+    default = "baseline_experiment",
+    help = "Name of the experiment run"
+)
 
 
     args = parser.parse_args(argv)
@@ -122,18 +128,18 @@ def main(argv: Optional[list[str]] = None) -> int:
     X_test,
     model_name=args.model,
     model_params=model_params,
-    y_test=y_test
+    y_test=y_test 
 )
-    save_prediction_results(files_paths = test_paths,
+    save_prediction_results(file_paths = test_paths,
                             y_true = y_test,
                             predictions = result["predictions"],
-                            output_path = f"prediction_results_{args.model}.csv"
+                            output_path = f"prediction_results_{args.model}_{args.run_name}.csv"
                             )
     if y_test is not None:
         save_confusion_matrix(
             result["metrics"]["confusion_matrix"],
             title=f"Confusion Matrix ({args.model})",
-            output_path=f"confusion_matrix_{args.model}.png"
+            output_path=f"confusion_matrix_{args.model}_{args.run_name}.png"
         )
     
 
