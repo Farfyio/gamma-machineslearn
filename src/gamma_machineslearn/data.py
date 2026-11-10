@@ -107,3 +107,21 @@ def load_experimental_spectrum(path: str | Path):
     counts = frame["Data"].to_numpy(dtype=float)
 
     return energy, counts
+
+def align_experimental_spectrum(energy, counts, target_energy):
+    #
+    mask = (
+        (target_energy >= energy.min())
+        & (target_energy <= energy.max())
+    )
+    aligned_energy = target_energy[mask]
+    #
+    aligned_counts = np.interp(aligned_energy, energy, counts)
+    return aligned_energy, aligned_counts, mask
+
+def load_mcnp_energy_grid(path : str | Path):
+    """Loads the energy grid from an MCNP output file."""
+    import pandas as pd
+    frame = pd.read_csv(path)
+    energy = frame["energy"].to_numpy(dtype = float)
+    return energy

@@ -32,3 +32,5 @@ data/
 
 # any datsets I'm using for training and testing, not to be tracked by git
 datasets/
+
+experimental_validation.py
