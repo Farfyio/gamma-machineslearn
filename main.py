@@ -5,6 +5,7 @@ import numpy as np
 from numpy.ma import exp
 from sklearn.model_selection import train_test_split
 
+from experimental_validation import X_pure_train
 from gamma_machineslearn import AnomalyDetectionExperiment
 from gamma_machineslearn.visualization import save_confusion_matrix, save_prediction_results
 from gamma_machineslearn.data import load_csv, load_spectra_directory
@@ -68,14 +69,18 @@ def main(argv: Optional[list[str]] = None) -> int:
             random_state = args.seed,
             shuffle = True
         )
-        _, X_impure_test, _, impure_paths_test = train_test_split(
+        #The prue and imprue spectra are split into a 80-20 split for the training and testing
+        X_impure_train, X_impure_test, _, impure_paths_test = train_test_split(
             impure_spectra,
             impure_paths,
             test_size = 0.2,
             random_state = args.seed,
             shuffle = True
+
         )
-        X_train = X_pure_train
+        X_train = np.vstack((X_pure_train, 
+                             X_impure_train))
+        
         X_test = np.vstack((X_pure_test, 
                             X_impure_test
                             ))
@@ -93,6 +98,18 @@ def main(argv: Optional[list[str]] = None) -> int:
         X_test = X_test[indices]
         y_test = y_test[indices]
         test_paths = test_paths[indices]
+
+        #Checlk the train/test split and print out the number of pure and impure spectra in each
+        print("\n--- Train/Test Check ---")
+        print("Pure train:", len(X_pure_train))
+        print("Impure train:", len(X_impure_train))
+        print("Total train:", len(X_train))
+
+        print("Pure test:", len(X_pure_test))
+        print("Impure test:", len(X_impure_test))
+        print("Total test:", len(X_test))
+
+        print("Total used:", len(X_train) + len(X_test), "\n")
 
 
 
