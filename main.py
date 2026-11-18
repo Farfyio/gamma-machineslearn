@@ -78,13 +78,12 @@ def main(argv: Optional[list[str]] = None) -> int:
         #             shuffle = True
         #         )
 
-        
+
         X_impure_test = impure_spectra
         impure_paths_test = impure_paths
 
 
-        X_train = np.vstack((X_pure_train, 
-                             X_impure_train))
+        X_train = X_pure_train
         
         X_test = np.vstack((X_pure_test, 
                             X_impure_test
@@ -107,7 +106,6 @@ def main(argv: Optional[list[str]] = None) -> int:
         #Checlk the train/test split and print out the number of pure and impure spectra in each
         print("\n--- Train/Test Check ---")
         print("Pure train:", len(X_pure_train))
-        print("Impure train:", len(X_impure_train))
         print("Total train:", len(X_train))
 
         print("Pure test:", len(X_pure_test))
