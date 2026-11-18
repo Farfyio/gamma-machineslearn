@@ -5,7 +5,7 @@ import numpy as np
 from numpy.ma import exp
 from sklearn.model_selection import train_test_split
 
-from experimental_validation import X_pure_train
+#from experimental_validation import X_pure_train
 from gamma_machineslearn import AnomalyDetectionExperiment
 from gamma_machineslearn.visualization import save_confusion_matrix, save_prediction_results
 from gamma_machineslearn.data import load_csv, load_spectra_directory
@@ -70,14 +70,19 @@ def main(argv: Optional[list[str]] = None) -> int:
             shuffle = True
         )
         #The prue and imprue spectra are split into a 80-20 split for the training and testing
-        X_impure_train, X_impure_test, _, impure_paths_test = train_test_split(
-            impure_spectra,
-            impure_paths,
-            test_size = 0.2,
-            random_state = args.seed,
-            shuffle = True
+        # X_impure_train, X_impure_test, _, impure_paths_test = train_test_split(
+        #             impure_spectra,
+        #             impure_paths,
+        #             test_size = 0.2,
+        #             random_state = args.seed,
+        #             shuffle = True
+        #         )
 
-        )
+        
+        X_impure_test = impure_spectra
+        impure_paths_test = impure_paths
+
+
         X_train = np.vstack((X_pure_train, 
                              X_impure_train))
         
